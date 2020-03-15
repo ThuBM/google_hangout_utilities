@@ -18,11 +18,46 @@ function generateThreadsListPage() {
     for (var i = 0; i < gotoLinks.length; i++) {
       gotoLinks[i].onclick = onclickGotoLink;
     }
+
+    var deleteLinks = document.querySelectorAll("a.delete");
+
+    for (var i = 0; i < deleteLinks.length; i++) {
+      deleteLinks[i].onclick = onclickDeleteLink;
+    }
+  });
+}
+
+function onclickDeleteLink(e) {
+  var targetLocalTopicId = e.currentTarget.getAttribute("data-thread-local-topic-id");
+  var targetRoomId = e.currentTarget.getAttribute("data-room-id");
+
+  chrome.storage.sync.get(["threadsInfo"], function(result) {
+    var threadsInfo = result.threadsInfo;
+
+    if (!threadsInfo) {threadsInfo = [];}
+
+    threadsInfo = threadsInfo.filter(function(threadInfo) {
+      return threadInfo.roomId !== targetRoomId || threadInfo.threadLocalTopicId !== targetLocalTopicId;
+    });
+
+    chrome.storage.sync.set({threadsInfo: threadsInfo}, function() {
+      generateThreadsListPage();
+    });
   });
 }
 
 function onclickGotoLink(e) {
-  window.targetRoom = e.currentTarget.getAttribute("data-thread-local-topic-id");
+  var targetLocalTopicId = e.currentTarget.getAttribute("data-thread-local-topic-id");
+  var targetRoomId = e.currentTarget.getAttribute("data-room-id");
+
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    var scriptCode = `
+      targetThread = document.querySelector("c-wiz[data-local-topic-id='${targetLocalTopicId}']");
+      targetThread.scrollIntoView();
+    `;
+
+    chrome.tabs.executeScript(tabs[0].id, { code: scriptCode});
+  });
 }
 
 function generateThreadsList(threadsInfo) {
@@ -57,10 +92,12 @@ function generateThreadRow(threadInfo) {
       <td>${threadInfo.roomName}</td>
       <td>${threadInfo.threadName}</td>
       <td>
-        <a data-thread-local-topic-id="${threadInfo.threadLocalTopicId}" class="goto" href="#">
+        <a data-thread-local-topic-id="${threadInfo.threadLocalTopicId}"
+          data-room-id="${threadInfo.roomId}" class="goto" href="#">
           Goto
         </a>
-        <a data-thread-local-topic-id="${threadInfo.threadLocalTopicId}">
+        <a data-thread-local-topic-id="${threadInfo.threadLocalTopicId}"
+          data-room-id="${threadInfo.roomId}" class="delete" href="#">
           Delete
         </a>
     </tr>

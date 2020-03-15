@@ -2,7 +2,12 @@
   "name": "Google hangout thread managments",
   "version": "1.0",
   "description": "By Baka Nobita",
-  "permissions": ["storage"],
+  "permissions": [
+    "storage",
+    "tabs",
+    "notifications",
+    "https://chat.google.com/"
+  ],
   "browser_action": {
     "default_popup": "popup.html"
   },
@@ -10,5 +15,9 @@
     "scripts": ["background.js"],
     "persistent": false
   },
+  "content_scripts": [{
+   "matches": ["https://*/*"],
+   "js": ["content_script.js"]
+  }],
   "manifest_version": 2
 }
