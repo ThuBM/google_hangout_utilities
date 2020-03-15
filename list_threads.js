@@ -51,12 +51,12 @@ function onclickGotoLink(e) {
   var targetRoomId = e.currentTarget.getAttribute("data-room-id");
 
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    var scriptCode = `
-      targetThread = document.querySelector("c-wiz[data-local-topic-id='${targetLocalTopicId}']");
-      targetThread.scrollIntoView();
-    `;
-
-    chrome.tabs.executeScript(tabs[0].id, { code: scriptCode});
+    var code = `var targetLocalTopicId = "${targetLocalTopicId}"`;
+    chrome.tabs.executeScript(tabs[0].id,{code: code},
+      function() {
+        chrome.tabs.executeScript(tabs[0].id, {file: "scroll.js"});
+      }
+    );
   });
 }
 
