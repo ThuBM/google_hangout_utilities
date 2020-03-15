@@ -1,0 +1,14 @@
+{
+  "name": "Google hangout thread managments",
+  "version": "1.0",
+  "description": "By Baka Nobita",
+  "permissions": ["storage"],
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "manifest_version": 2
+}
