@@ -51,7 +51,10 @@ function onclickGotoLink(e) {
   var targetRoomId = e.currentTarget.getAttribute("data-room-id");
 
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    var code = `var targetLocalTopicId = "${targetLocalTopicId}"`;
+    var code = `
+      var targetLocalTopicId = "${targetLocalTopicId}";
+      var targetRoomId = "${targetRoomId}";
+    `;
     chrome.tabs.executeScript(tabs[0].id,{code: code},
       function() {
         chrome.tabs.executeScript(tabs[0].id, {file: "scroll.js"});

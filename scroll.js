@@ -14,10 +14,17 @@ function scrollToTarget(targetLocalTopicId, tryTimes) {
   console.log("tryTimes: " + tryTimes);
 
   window.setTimeout(function(){
-    scorllToTarget(targetLocalTopicId, tryTimes);
+    scrollToTarget(targetLocalTopicId, tryTimes);
   }, 1000);
 }
 
-var tryTimes = 0;
+if (window.location.href.indexOf(targetRoomId) < 0) {
+  var href = window.location.href;
+  var lastSlashIndex = href.lastIndexOf("/");
 
-scrollToTarget(targetLocalTopicId, tryTimes);
+  window.location.href = `${href.substring(0, lastSlashIndex)}/${targetRoomId}`;
+} else {
+  var tryTimes = 0;
+
+  scrollToTarget(targetLocalTopicId, tryTimes);
+}
