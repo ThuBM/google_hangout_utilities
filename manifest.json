@@ -6,7 +6,8 @@
     "storage",
     "tabs",
     "notifications",
-    "https://chat.google.com/"
+    "https://chat.google.com/",
+    "contextMenus"
   ],
   "browser_action": {
     "default_popup": "popup.html"
@@ -14,6 +15,9 @@
   "background": {
     "scripts": ["background.js"],
     "persistent": false
+  },
+  "icons" : {
+    "16" : "imgs/icon.png"
   },
   "content_scripts": [{
    "matches": ["https://*/*"],
