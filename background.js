@@ -1,6 +1,6 @@
 chrome.runtime.onInstalled.addListener(function() {
   chrome.contextMenus.create({
-    title: "My menu",
+    title: "Add thread to management",
     id: "google-hangout-thread-management-menu",
     contexts: ["page"]
   });

@@ -8,14 +8,20 @@ document.addEventListener("mousedown", function(event){
   if (event.button == 2) { // right click
     var targetThreadElement = event.target.closest("c-wiz[data-local-topic-id]");
     var href = window.location.href;
-    targetThreadLocalTopicId = targetThreadElement.getAttribute("data-local-topic-id");
+
+    if (targetThreadElement) {
+      targetThreadLocalTopicId = targetThreadElement.getAttribute("data-local-topic-id");
+    }
 
     targetRoomId = href.substring(href.lastIndexOf("/") + 1);
-    var targetRoomNameElement = document.querySelector(`span[data-group-id='space/${targetRoomId}'] span[title]`);
-    targetRoomName = targetRoomNameElement.getAttribute("title");
 
-    mousePosition.x = event.clientX;
-    mousePosition.y = event.clientY;
+    var targetRoomNameElement = document.querySelector(`span[data-group-id='space/${targetRoomId}'] span[title]`);
+    if (targetRoomNameElement) {
+      targetRoomName = targetRoomNameElement.getAttribute("title");
+    }
+
+    mousePosition.x = event.screenX;
+    mousePosition.y = event.screenY;
   } else {
     // check if mousedown position is not in popup
     // → hidePopup
@@ -26,9 +32,11 @@ document.addEventListener("mousedown", function(event){
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request == "clickToContent") {
     sendResponse({});
-    var popup = displayPopup();
+    if (targetThreadLocalTopicId) {
+      var popup = displayPopup();
 
-    popup.querySelector("button").onclick = onclickThreadFormPopupSaveBtn;
+      popup.querySelector("button").onclick = onclickThreadFormPopupSaveBtn;
+    }
   }
 });
 
@@ -42,7 +50,7 @@ function displayPopup() {
 
   popup.style.left = mousePosition.x + "px";
   popup.style.top = mousePosition.y + "px";
-  popup.style.display = "visible";
+  popup.style.display = "block";
 
   popup.querySelector("button").onclick = onclickThreadFormPopupSaveBtn;
   return popup;
@@ -58,6 +66,8 @@ function onclickThreadFormPopupSaveBtn(e) {
 
   chrome.storage.sync.get(["threadsInfo"], function(result) {
     var threadsInfo = result.threadsInfo;
+
+    if (!threadsInfo) {threadsInfo = [];}
 
     threadsInfo.push({
       roomId: targetRoomId, roomName: targetRoomName,
