@@ -8,7 +8,7 @@ chrome.runtime.onInstalled.addListener(function() {
 });
 
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
-    if (info.menuItemId === "google-hangout-thread-management-menu") {
-      chrome.tabs.sendMessage(tab.id, "clickToContent", function(response) {});
-    }
+  if (info.menuItemId === "google-hangout-thread-management-menu") {
+    chrome.tabs.sendMessage(tab.id, "clickToContent", function(response) {});
+  }
 });
