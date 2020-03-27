@@ -8,7 +8,7 @@
 ```
 mkdir ~/Documents/chrome_extensions
 cd ~/Documents/chrome_extensions
-git clone git@bitbucket.org:buiminhthuk55/google-hangout-threads-management.git
+git clone git@github.com:ThuBM/google_hangout_utilities.git
 ```
 
 - Read [this tutorial] to import `google-hangout-threads-management` to chrome.
